@@ -1,0 +1,4 @@
+1. 先 show master status 将当前的 binlog filename and position 保存
+2. 全量执行完；（保存在本地）
+3. 增量；
+
