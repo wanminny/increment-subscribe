@@ -12,6 +12,7 @@ import (
 	"github.com/siddontang/go-mysql/replication"
 	"lt-test/supplier/mq"
 	"strconv"
+	"lt-test/supplier/crontab"
 )
 
 const (
@@ -161,6 +162,7 @@ func All(c *canal.Canal)  {
 	// Start canal
 	//从最初的mysqldump 开始；先全量后增量；
 	go mq.Producer(skuAndSupplierIdJson)
+
 	c.Run()
 }
 
@@ -186,14 +188,15 @@ func Increment(c *canal.Canal,pos tools.Position)  {
 
 
 func Start(c *canal.Canal) (err error) {
+
+	//定时更新 binlog；防止mysql挂掉后重新mysqldump;
+	go crontab.ToUpdateBinLogFile()
+
 	pos := tools.Position{}
 	pos,err = tools.ReadFileLast(BIN_LOG_FILE_TO_READ)
-	log.Println(pos)
 	if err != nil{
 		log.Println(err)
 	}
-	//All(c)
-	//return
 	if len(pos.FileName) >= 1  && len(pos.Pos) >= 1 {
 		Increment(c,pos)
 	}else{
