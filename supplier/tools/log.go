@@ -59,10 +59,10 @@ func ReadFileLast(fileName string) (pos Position ,err error) {
 		log.Println(err)
 	}
 	if len(stream) > 1 {
-		fmt.Printf("%s",string(stream))
+		//fmt.Printf("%s",string(stream))
 		info := strings.Split(string(stream),"\n")
 		length := len(info)
-		log.Printf("%d",length)
+		//log.Printf("%d",length)
 		//log.Printf("%v\n %d\n %s\n %s\n%s\n",info,length,info[0],info[1])
 		//xxx,xx,xxx
 		for k,v := range info{
