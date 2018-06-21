@@ -11,6 +11,7 @@ import (
 	"github.com/siddontang/go-mysql/mysql"
 	"github.com/siddontang/go-mysql/replication"
 	"lt-test/supplier/mq"
+	"strconv"
 )
 
 const (
@@ -29,6 +30,9 @@ const (
 	//需要监控binlogFile
 	BIN_LOG_FILE = "mysql-bin.000076"
 	BIN_LOG_POSITION = 40415958
+
+	//读取的日志文件
+	BIN_LOG_FILE_TO_READ = "./binlog.txt"
 )
 
 var (
@@ -161,15 +165,39 @@ func All(c *canal.Canal)  {
 }
 
 //增量 	//从指定位置开始增量；show master status
-func Increment(c *canal.Canal)  {
+func Increment(c *canal.Canal,pos tools.Position)  {
 
 	go mq.Producer(skuAndSupplierIdJson)
 
-	binlogFile := BIN_LOG_FILE
-	binlogPos := uint32(BIN_LOG_POSITION)
+	// 之前是写死
+	//binlogFile := BIN_LOG_FILE
+	//binlogPos := uint32(BIN_LOG_POSITION)
+
+	binlogFile := pos.FileName
+	tempPos,_ := strconv.Atoi(pos.Pos)
+	binlogPos := uint32(tempPos)
+
 	p := mysql.Position{
 		Name:binlogFile,
 		Pos:binlogPos,
 	}
 	c.RunFrom(p)
+}
+
+
+func Start(c *canal.Canal) (err error) {
+	pos := tools.Position{}
+	pos,err = tools.ReadFileLast(BIN_LOG_FILE_TO_READ)
+	log.Println(pos)
+	if err != nil{
+		log.Println(err)
+	}
+	//All(c)
+	//return
+	if len(pos.FileName) >= 1  && len(pos.Pos) >= 1 {
+		Increment(c,pos)
+	}else{
+		All(c)
+	}
+	return
 }

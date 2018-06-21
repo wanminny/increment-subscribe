@@ -37,9 +37,6 @@ func main() {
 
 	// Register a handler to handle RowsEvent
 	c.SetEventHandler(&biz.MyEventHandler{})
-	//全量
-	biz.All(c)
-	//增量
-	//increment(c)
 
+	biz.Start(c)
 }

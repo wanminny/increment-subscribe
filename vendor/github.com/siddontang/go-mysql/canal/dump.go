@@ -9,6 +9,8 @@ import (
 	"github.com/siddontang/go-mysql/mysql"
 	"github.com/siddontang/go-mysql/schema"
 	"gopkg.in/birkirb/loggers.v1/log"
+	"lt-test/supplier/tools"
+	"fmt"
 )
 
 type dumpParseHandler struct {
@@ -123,6 +125,10 @@ func (c *Canal) dump() error {
 	log.Infof("dump MySQL and parse OK, use %0.2f seconds, start binlog replication at (%s, %d)",
 		time.Now().Sub(start).Seconds(), h.name, h.pos)
 
+	//log the last binlogfile and position;
+	binInfo := fmt.Sprintf("%s,%s,%d\n",tools.CurrentTime(),h.name,h.pos)
+	tools.SaveToFile(binInfo,"binlog.txt")
+
 	pos := mysql.Position{h.name, uint32(h.pos)}
 	c.master.Update(pos)
 	c.eventHandler.OnPosSynced(pos, true)
@@ -135,7 +141,7 @@ func (c *Canal) tryDump() error {
 	if (len(pos.Name) > 0 && pos.Pos > 0) ||
 		(gtid != nil && gtid.String() != "") {
 		// we will sync with binlog name and position
-		log.Infof("skip dump, use last binlog replication pos %s or GTID %s", pos, gtid)
+		log.Infof("skip dump, use last binlog replication pos %s or GTID %#v", pos, gtid)
 		return nil
 	}
 

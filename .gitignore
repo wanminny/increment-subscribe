@@ -3,3 +3,6 @@
 #config
 .idea
 ./supplier/.idea
+./binlog.txt
+./supplier_log.txt
+
