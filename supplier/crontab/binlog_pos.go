@@ -54,8 +54,8 @@ func ToUpdateBinLogFile()  {
 
 	for{
 		select {
-			case <-time.After(4*time.Second):
-			//case <-time.After(2*time.Hour):
+			//case <-time.After(4*time.Second):
+			case <-time.After(2*time.Hour):
 				recordUpdate()
 		}
 	}
