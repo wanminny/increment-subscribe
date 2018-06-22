@@ -23,4 +23,3 @@ MySQL 全量，增量订阅（便于以后系统消费数据！）
 
   mysql (mask slave ) ->  mq (broker) ->  异构数据处理（目的地）
 
-  
