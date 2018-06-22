@@ -21,7 +21,7 @@ var (
 	record           = Record{Rows: make([]SkuSupplierId, 0)}
 	skuAndSupplierId SkuSupplierId
 
-	skuAndSupplierIdJson chan []byte = make(chan []byte,2048)
+	skuAndSupplierIdJson = make(chan []byte,2048)
 )
 
 // canal for watch insert update; delete
@@ -174,6 +174,8 @@ func Start(c *canal.Canal) (err error) {
 	go crontab.ToUpdateBinLogFile()
 	//开启日志查看
 	go http.StartHttpService()
+	//检查mq是否健康；
+	go crontab.CheckMqIsAlive()
 
 	pos := tools.Position{}
 	pos,err = tools.ReadFileLast(BIN_LOG_FILE_TO_READ)

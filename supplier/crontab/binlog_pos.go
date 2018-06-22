@@ -14,6 +14,7 @@ var (
 	crontabSqlC = &tools.MysqlConfig{}
 )
 
+//
 func recordUpdate()  {
 
 	crontabSqlC.ReadMySqlIni(crontabSqlC)
@@ -55,7 +56,7 @@ func ToUpdateBinLogFile()  {
 	for{
 		select {
 			//case <-time.After(4*time.Second):
-			case <-time.After(2*time.Hour):
+			case <-time.After(6*time.Hour):
 				recordUpdate()
 		}
 	}
