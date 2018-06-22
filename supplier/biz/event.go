@@ -107,7 +107,7 @@ func (h *MyEventHandler) OnRow(e *canal.RowsEvent) error {
 				}
 				if len(record.Rows) >= 1 {
 					tmpSkuAndSupplierIdJson, _ := json.Marshal(record)
-					log.Printf("%s\n", tmpSkuAndSupplierIdJson)
+					//log.Printf("%s\n", tmpSkuAndSupplierIdJson)
 					skuAndSupplierIdJson <- tmpSkuAndSupplierIdJson
 					//go mq.Producer(skuAndSupplierIdJson)
 				}
@@ -122,7 +122,7 @@ func (h *MyEventHandler) OnRow(e *canal.RowsEvent) error {
 					record.Rows = append(record.Rows, skuAndSupplierId)
 				}
 				tmpSkuAndSupplierIdJson, _ := json.Marshal(record)
-				log.Printf("%s\n", tmpSkuAndSupplierIdJson)
+				//log.Printf("%s\n", tmpSkuAndSupplierIdJson)
 				skuAndSupplierIdJson <- tmpSkuAndSupplierIdJson
 				//go mq.Producer(skuAndSupplierIdJson)
 
@@ -137,7 +137,7 @@ func (h *MyEventHandler) OnRow(e *canal.RowsEvent) error {
 					record.Rows = append(record.Rows, skuAndSupplierId)
 				}
 				tmpSkuAndSupplierIdJson, _ := json.Marshal(record)
-				log.Printf("%s\n", tmpSkuAndSupplierIdJson)
+				//log.Printf("%s\n", tmpSkuAndSupplierIdJson)
 				skuAndSupplierIdJson <- tmpSkuAndSupplierIdJson
 				//go mq.Producer(skuAndSupplierIdJson)
 
