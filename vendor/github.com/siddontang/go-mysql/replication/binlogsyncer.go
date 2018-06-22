@@ -18,6 +18,8 @@ import (
 	mylog "log"
 
 	"lt-test/supplier/tools"
+	. "lt-test/supplier/env"
+
 )
 
 var (
@@ -176,7 +178,7 @@ func (b *BinlogSyncer) FlushBinLogRecord() (err error){
 		//mylog.Printf("%s,%s",fileName,pos)
 		toWriteStr := fmt.Sprintf("%s,%s,%s\n",tools.CurrentTime(),fileName,pos)
 		//mylog.Println(toWriteStr)
-		tools.SaveToFile(toWriteStr,"binlog.txt")
+		tools.SaveToFile(toWriteStr,BIN_LOG_FILE_TO_READ)
 		//if err != nil{
 		//	pos,err :=r.GetString(0,1)
 		//	if err != nil{

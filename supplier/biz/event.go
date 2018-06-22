@@ -13,27 +13,8 @@ import (
 	"lt-test/supplier/mq"
 	"strconv"
 	"lt-test/supplier/crontab"
-)
-
-const (
-	//事件类型
-	UPDATE_EVENT = "update"
-	DELETE_EVENT = "delete"
-	INSERT_EVENT = "insert"
-
-	//需要监控的表
-	TABLE_SKU_SUPPLIER_RELEATION = "sku_supplier_relation"
-	TABLE_SKU_SUPPLIER_SYNC      = "sku_supplier_sync"
-
-	//初始mysqldump的行数
-	START_UP_SYNC_RECORDS = 1000
-
-	//需要监控binlogFile
-	BIN_LOG_FILE = "mysql-bin.000076"
-	BIN_LOG_POSITION = 40415958
-
-	//读取的日志文件
-	BIN_LOG_FILE_TO_READ = "./binlog.txt"
+	. "lt-test/supplier/env"
+	"lt-test/supplier/http"
 )
 
 var (
@@ -191,6 +172,8 @@ func Start(c *canal.Canal) (err error) {
 
 	//定时更新 binlog；防止mysql挂掉后重新mysqldump;
 	go crontab.ToUpdateBinLogFile()
+	//开启日志查看
+	go http.StartHttpService()
 
 	pos := tools.Position{}
 	pos,err = tools.ReadFileLast(BIN_LOG_FILE_TO_READ)

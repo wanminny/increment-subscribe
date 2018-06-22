@@ -13,7 +13,7 @@ import (
 
 var (
 	//日志文件
-	LOG_TO_FILE_NAME = "supplier_log.txt"
+	LOG_TO_FILE_NAME = "logs/supplier_log.txt"
 
 )
 

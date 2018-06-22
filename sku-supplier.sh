@@ -7,7 +7,7 @@ dirpath=`dirname $0`
 cd $dirpath
 echo `pwd`
 echo $(date +%Y-%m-%d_%H:%M:%S)
-./monitor &
+nohup ./monitor &
 
 
 

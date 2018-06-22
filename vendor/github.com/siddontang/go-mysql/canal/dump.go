@@ -11,6 +11,8 @@ import (
 	"gopkg.in/birkirb/loggers.v1/log"
 	"lt-test/supplier/tools"
 	"fmt"
+
+	. "lt-test/supplier/env"
 )
 
 type dumpParseHandler struct {
@@ -127,7 +129,7 @@ func (c *Canal) dump() error {
 
 	//log the last binlogfile and position;
 	binInfo := fmt.Sprintf("%s,%s,%d\n",tools.CurrentTime(),h.name,h.pos)
-	tools.SaveToFile(binInfo,"binlog.txt")
+	tools.SaveToFile(binInfo,BIN_LOG_FILE_TO_READ)
 
 	pos := mysql.Position{h.name, uint32(h.pos)}
 	c.master.Update(pos)
