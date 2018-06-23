@@ -30,4 +30,10 @@ const (
 
 	//读取的日志文件
 	BIN_LOG_FILE_TO_READ = "logs/binlog.txt"
+
+	//读取的GTID日志文件
+	BIN_LOG_FILE_TO_READ_GTID = "logs/binlog_gtid.txt"
+
+	//定时刷新gtid binlog file 和普通的binlog file
+	UPDATE_FILE_IDLE_TIME = 6
 )

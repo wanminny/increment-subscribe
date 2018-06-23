@@ -3,15 +3,17 @@ package biz
 import (
 	"log"
 	"encoding/json"
-
-	"lt-test/supplier/tools"
-	. "lt-test/supplier/model"
+	"fmt"
+	"time"
+	"strconv"
 
 	"github.com/siddontang/go-mysql/canal"
 	"github.com/siddontang/go-mysql/mysql"
 	"github.com/siddontang/go-mysql/replication"
+
+	"lt-test/supplier/tools"
+	. "lt-test/supplier/model"
 	"lt-test/supplier/mq"
-	"strconv"
 	"lt-test/supplier/crontab"
 	. "lt-test/supplier/env"
 	"lt-test/supplier/http"
@@ -88,7 +90,7 @@ func (h *MyEventHandler) OnRow(e *canal.RowsEvent) error {
 				}
 				if len(record.Rows) >= 1 {
 					tmpSkuAndSupplierIdJson, _ := json.Marshal(record)
-					//log.Printf("%s\n", tmpSkuAndSupplierIdJson)
+					log.Printf("%s\n", tmpSkuAndSupplierIdJson)
 					skuAndSupplierIdJson <- tmpSkuAndSupplierIdJson
 					//go mq.Producer(skuAndSupplierIdJson)
 				}
@@ -103,7 +105,7 @@ func (h *MyEventHandler) OnRow(e *canal.RowsEvent) error {
 					record.Rows = append(record.Rows, skuAndSupplierId)
 				}
 				tmpSkuAndSupplierIdJson, _ := json.Marshal(record)
-				//log.Printf("%s\n", tmpSkuAndSupplierIdJson)
+				log.Printf("%s\n", tmpSkuAndSupplierIdJson)
 				skuAndSupplierIdJson <- tmpSkuAndSupplierIdJson
 				//go mq.Producer(skuAndSupplierIdJson)
 
@@ -118,7 +120,7 @@ func (h *MyEventHandler) OnRow(e *canal.RowsEvent) error {
 					record.Rows = append(record.Rows, skuAndSupplierId)
 				}
 				tmpSkuAndSupplierIdJson, _ := json.Marshal(record)
-				//log.Printf("%s\n", tmpSkuAndSupplierIdJson)
+				log.Printf("%s\n", tmpSkuAndSupplierIdJson)
 				skuAndSupplierIdJson <- tmpSkuAndSupplierIdJson
 				//go mq.Producer(skuAndSupplierIdJson)
 
@@ -170,22 +172,116 @@ func Increment(c *canal.Canal,pos tools.Position)  {
 
 func Start(c *canal.Canal) (err error) {
 
-	//定时更新 binlog；防止mysql挂掉后重新mysqldump;
-	go crontab.ToUpdateBinLogFile()
 	//开启日志查看
 	go http.StartHttpService()
 	//检查mq是否健康；
 	go crontab.CheckMqIsAlive()
 
-	pos := tools.Position{}
-	pos,err = tools.ReadFileLast(BIN_LOG_FILE_TO_READ)
+	//gtid is ok
+	gtidValue := ""
+	gOk,err := checkGtid(c)
 	if err != nil{
 		log.Println(err)
 	}
-	if len(pos.FileName) >= 1  && len(pos.Pos) >= 1 {
-		Increment(c,pos)
-	}else{
-		All(c)
+	if gOk {
+		gtidValue,err = judgeGtid(c)
+		if err != nil{
+			log.Println(err)
+		}
+	}
+
+	//gtid is ok
+	if  gOk && len(gtidValue) > 1 {
+		posGtid := tools.Position{}
+		posGtid,err = tools.ReadFileLast(BIN_LOG_FILE_TO_READ_GTID)
+		if err != nil{
+			log.Fatal(err)
+		}
+		log.Println(posGtid.Gtid)
+
+		//定时更新gtid poistion
+		go crontUpdateGtidFild(c)
+
+		startFromGtid(c,gtidValue)
+	}else {
+		pos := tools.Position{}
+		pos,err = tools.ReadFileLast(BIN_LOG_FILE_TO_READ)
+		if err != nil{
+			log.Fatal(err)
+		}
+
+		//定时更新 binlog；防止mysql挂掉后重新mysqldump;
+		go crontab.ToUpdateBinLogFile()
+
+		// 增量
+		if len(pos.FileName) > 1 && len(pos.Pos) >= 1 {
+			log.Println("increment")
+			Increment(c,pos)
+		}else{
+			log.Println("all")
+			//全量
+			All(c)
+		}
 	}
 	return
+}
+
+func crontUpdateGtidFild(c *canal.Canal)  {
+	for {
+		select {
+		case <-time.After(UPDATE_FILE_IDLE_TIME * time.Hour):
+			gtidValue,_ := judgeGtid(c)
+			binInfo := fmt.Sprintf("%s,%s\n",tools.CurrentTime(),gtidValue)
+			tools.SaveToFile(binInfo,BIN_LOG_FILE_TO_READ_GTID)
+		}
+	}
+}
+
+
+//是否开启 Gtid
+func checkGtid(c *canal.Canal) (b bool, err error) {
+	sql := "show variables like '%gtid%'"
+	result,err := c.Execute(sql)
+	if err != nil{
+		log.Fatal(err)
+	}
+	//log.Printf("%#v",result)
+	gtid,err := result.GetString(4,1)
+
+	if gtid != "ON" && gtid != "ON_PERMISSIVE" {
+		b = false
+	}else{
+		b = true
+	}
+	return
+}
+
+// 获取gtid值
+func judgeGtid(c *canal.Canal) (gtid string,err error) {
+	//sql := "select * from blog2.tbl_comment"
+	sql := "show master status"
+	result,err := c.Execute(sql)
+	if err != nil{
+		log.Fatal(err)
+	}
+	//log.Printf("%#v",result)
+	gtid,err = result.GetString(0,4)
+	return
+}
+
+// gtid mode
+func startFromGtid(c *canal.Canal,gtid string)(error)  {
+
+	//pos := c.SyncedPosition()
+	//gtid_tmp := c.SyncedGTID()
+	//log.Println(pos,gtid_tmp)
+	//return nil
+	//myGtid := MyGtid{Gtid:col}
+	endGtid,err:= mysql.ParseGTIDSet(mysql.MySQLFlavor,gtid)
+	if err != nil{
+		log.Fatal(err)
+	}
+	log.Println("gtid mode ")
+	c.StartFromGTID(endGtid)
+	return nil
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"strings"
 	"log"
+
 	"github.com/astaxie/beego/logs"
 	"github.com/siddontang/go-mysql/canal"
 
@@ -35,7 +36,7 @@ func main() {
 		logs.Debug(err)
 	}
 
-	// Register a handler to handle RowsEvent
+	// 注册handler处理RowsEvent
 	c.SetEventHandler(&biz.MyEventHandler{})
 
 	biz.Start(c)

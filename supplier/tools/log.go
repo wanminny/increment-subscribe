@@ -20,6 +20,7 @@ var (
 type Position struct {
 	FileName string
 	Pos string
+	Gtid string
 }
 
 func LogTofile(dumpLog string)  {
@@ -71,6 +72,9 @@ func ReadFileLast(fileName string) (pos Position ,err error) {
 				fmt.Println(lineInfo)
 				pos.FileName = string(lineInfo[1])
 				pos.Pos = string(lineInfo[2])
+				if len(lineInfo) == 4{
+					pos.Gtid = string(lineInfo[3]) //gtid
+				}
 			}
 		}
 	}

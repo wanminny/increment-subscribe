@@ -5,6 +5,10 @@ import (
 
 	"github.com/siddontang/go-mysql/mysql"
 	"gopkg.in/birkirb/loggers.v1/log"
+
+	. "lt-test/supplier/env"
+	"fmt"
+	"lt-test/supplier/tools"
 )
 
 type masterInfo struct {
@@ -28,6 +32,9 @@ func (m *masterInfo) UpdateGTID(gtid mysql.GTIDSet) {
 
 	m.Lock()
 	m.gtid = gtid
+	//记录文件
+	binInfo := fmt.Sprintf("%s,%s\n",tools.CurrentTime(),m.gtid)
+	tools.SaveToFile(binInfo,BIN_LOG_FILE_TO_READ_GTID)
 	m.Unlock()
 }
 
