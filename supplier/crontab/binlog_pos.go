@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"lt-test/supplier/tools"
 	"log"
+	. "lt-test/supplier/env"
 )
 
 var (
@@ -50,13 +51,15 @@ func recordUpdate()  {
 	}
 }
 
-//没四个小时刷新一次;防止mysql意外宕机后需要重新同步数据过多
+//每6个小时刷新一次;防止mysql意外宕机后需要重新同步数据过多
 func ToUpdateBinLogFile()  {
 
+	timer := time.NewTimer( UPDATE_FILE_IDLE_TIME *time.Hour)
 	for{
+		timer.Reset(UPDATE_FILE_IDLE_TIME *time.Hour)
 		select {
 			//case <-time.After(4*time.Second):
-			case <-time.After(6*time.Hour):
+			case <- timer.C:  //比after方式节省timer 资源
 				recordUpdate()
 		}
 	}

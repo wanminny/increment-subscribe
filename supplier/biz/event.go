@@ -227,9 +227,13 @@ func Start(c *canal.Canal) (err error) {
 }
 
 func crontUpdateGtidFild(c *canal.Canal)  {
+
+	timer := time.NewTimer(UPDATE_FILE_IDLE_TIME * time.Hour)
 	for {
+		timer.Reset(UPDATE_FILE_IDLE_TIME * time.Hour)
 		select {
-		case <-time.After(UPDATE_FILE_IDLE_TIME * time.Hour):
+		//case <-time.After(UPDATE_FILE_IDLE_TIME * time.Hour):
+		case <-timer.C:
 			gtidValue,_ := judgeGtid(c)
 			binInfo := fmt.Sprintf("%s,%s\n",tools.CurrentTime(),gtidValue)
 			tools.SaveToFile(binInfo,BIN_LOG_FILE_TO_READ_GTID)

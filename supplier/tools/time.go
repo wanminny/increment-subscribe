@@ -12,3 +12,11 @@ func CurrentTime() string  {
 
 	return nowTime
 }
+
+//计算时间差
+func Sub(start time.Time,end time.Time) string {
+	delta := end.Sub(start)
+	tmp := fmt.Sprintf("%f",delta.Seconds())
+	return tmp
+}
+
