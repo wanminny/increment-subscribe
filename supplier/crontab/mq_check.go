@@ -43,7 +43,7 @@ func isAlive()  {
 	//拨号；建立连接
 	conn, err := amqp.Dial(Url)
 	if err != nil {
-		log.Println(err)
+		log.Println(Url,err)
 		tools.DdTalk([]byte(err.Error()))
 		return
 	}
