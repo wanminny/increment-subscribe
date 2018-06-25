@@ -16,6 +16,27 @@ MySQL 全量，增量订阅（便于以后系统消费数据！）
 9.mysql挂掉后自动重连
 10.rabbitmq 服务健康检查（报警），防止服务宕机后 rows更新过多；阻塞后内存大幅增大；
 11. gtid mode支持；
+12. 远程mysql测试；【在另外一台主机；mysqldump and increment 测试；】
+
+
+操作：
+
+0. bind-address=0.0.0.0
+
+1. CREATE USER root IDENTIFIED BY 'root';
+GRANT SELECT, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'root'@'%';
+-- GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' ;
+FLUSH PRIVILEGES;CREATE USER root IDENTIFIED BY 'root';
+                 GRANT SELECT, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'root'@'%';
+                 -- GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' ;
+                 FLUSH PRIVILEGES;
+grant all privileges on *.* to root@'%' identified by '123456';
+                 FLUSH PRIVILEGES;
+
+2. 数据库db ;table要对应好！
+
+
+
 
 
 
