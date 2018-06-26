@@ -8,14 +8,18 @@ import (
 	"io"
 	"io/ioutil"
 	"fmt"
+	"time"
 )
 
 
 var (
 	//日志文件
-	LOG_TO_FILE_NAME = "logs/supplier_log.txt"
+	LOG_TO_FILE_NAME = "logs/supplier_log_"
 
 )
+
+const TIME_FORMAT  = "2006-01-02 15:04:05"
+
 
 type Position struct {
 	FileName string
@@ -25,7 +29,11 @@ type Position struct {
 
 func LogTofile(dumpLog string)  {
 
-	file,err := os.OpenFile(LOG_TO_FILE_NAME,os.O_CREATE | os.O_APPEND | os.O_WRONLY,0755)
+
+	current := time.Now().Format(TIME_FORMAT)
+	endFile := LOG_TO_FILE_NAME+current+".txt"
+
+	file,err := os.OpenFile(endFile,os.O_CREATE | os.O_APPEND | os.O_WRONLY,0755)
 	if err != nil{
 		log.Println(err)
 	}
