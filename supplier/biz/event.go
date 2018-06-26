@@ -47,7 +47,8 @@ func (h *MyEventHandler) OnRow(e *canal.RowsEvent) error {
 	eventType := e.Action
 	tables := e.Table.Name
 	recordsLen := len(e.Rows)
-	//log.Println(e.Rows)
+	log.Println(tables,e.Rows)
+
 	if eventType == INSERT_EVENT && recordsLen >= START_UP_SYNC_RECORDS {
 		//初始mysqldump ignore;
 	} else {
