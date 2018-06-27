@@ -44,7 +44,7 @@ func (sql MysqlConfig)ReadMySqlIni(result *MysqlConfig)  {
 }
 
 // 获取mq ini 配置
-func (mq RabbitMqConfig)ReadMQIni(result *RabbitMqConfig)  {
+func (mq RabbitMqConfig)ReadMQIni(result *RabbitMqConfig,source string)  {
 
 	ini,err := config.NewConfig("ini","./supplier/config/"+ env.RABBIT_MQ_FILE_TEST)
 	//FailOnError(err,err.Error())
@@ -52,11 +52,11 @@ func (mq RabbitMqConfig)ReadMQIni(result *RabbitMqConfig)  {
 		log.Fatal(err)
 	}
 
-	result.Host = ini.String("mq::host")
-	result.Port = ini.String("mq::port")
-	result.Username = ini.String("mq::username")
-	result.Password = ini.String("mq::password")
-	result.Vhost = ini.String("mq::vhost")
-	result.Exchange = ini.String("mq::exchange")
-	result.Queue = ini.String("mq::queue")
+	result.Host = ini.String(source + "::host")
+	result.Port = ini.String(source + "::port")
+	result.Username = ini.String(source + "::username")
+	result.Password = ini.String(source + "::password")
+	result.Vhost = ini.String(source + "::vhost")
+	result.Exchange = ini.String(source + "::exchange")
+	result.Queue = ini.String(source + "::queue")
 }

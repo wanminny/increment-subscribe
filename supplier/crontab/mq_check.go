@@ -35,7 +35,7 @@ func CheckMqIsAlive()  {
 // 检查rabbit是否健康
 func isAlive()  {
 
-	mqC.ReadMQIni(&mqC)
+	mqC.ReadMQIni(&mqC,"mq")
 	Url = scheme + mqC.Username + ":" + mqC.Password + "@" + mqC.Host + ":" + mqC.Port + "/" + mqC.Vhost
 	queueName := mqC.Queue
 
