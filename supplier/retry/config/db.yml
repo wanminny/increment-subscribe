@@ -1,0 +1,33 @@
+
+
+
+db:
+  env: 'product'
+
+mysql:
+  product:
+    host: '127.0.0.1'
+    username: 'root'
+    password: '123456'
+    port: 3306
+    dbname: 'blog2'
+    maxIdle: 5
+    maxOpen: 100
+  testing:
+    host: '127.0.0.1'
+    username: 'root'
+    password: '123456'
+    port: 3306
+    dbname: 'blog2'
+    maxIdle: 5
+    maxOpen: 100
+  dev:
+    host: '127.0.0.1'
+    username: 'root'
+    password: '123456'
+    port: 3306
+    dbname: 'blog2'
+    maxIdle: 5
+    maxOpen: 100
+
+

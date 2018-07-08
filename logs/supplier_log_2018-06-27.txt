@@ -1,0 +1,15 @@
+%!s(chan []uint8=0xc420072120)
+%!s(chan []uint8=0xc420068120)
+%!s(chan []uint8=0xc420072120)
+%!s(chan []uint8=0xc420066120)
+%!s(chan []uint8=0xc4201220c0)
+%!s(chan []uint8=0xc4201220c0)
+%!s(chan []uint8=0xc420072120)
+%!s(chan []uint8=0xc420070120)
+%!s(chan []uint8=0xc420066120)
+333
+333
+444
+8
+89
+890
