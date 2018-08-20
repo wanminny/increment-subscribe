@@ -45,3 +45,17 @@ grant all privileges on *.* to root@'%' identified by '123456';
 
   mysql (mask slave ) ->  mq (broker) ->  异构数据处理（目的地）
 
+
+
+
+# todo 
+
+1. 区分数据表；各个执行；（并发）
+2. 将数据库直接执行到目的端；
+3. DDL处理；
+4.由于binlog 需要同步所有日志；会严重耗费网络带宽；（即使设置了表，它是基于所有过来的日志在过滤
+可以考虑只分析指定的database->table的数据；严重减小网络带宽的消耗。）
+
+
+
+

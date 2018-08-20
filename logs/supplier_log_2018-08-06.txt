@@ -1,0 +1,5 @@
+{"event_type":"delete","rows":[{"id":379731,"sku":"sku","supplier_id":960,"current_time":"2018-08-06 15:43:52"}]}
+{"event_type":"delete","rows":[{"id":379727,"sku":"sku","origin_supplier_id":7933,"supplier_id":956,"current_time":"2018-08-06 15:48:59"}]}
+{"event_type":"delete","rows":[{"id":379730,"sku":"sku","origin_supplier_id":7933,"supplier_id":959,"current_time":"2018-08-06 15:49:36"}]}
+{"event_type":"update","rows":[{"id":379732,"sku":"sku","origin_supplier_id":961,"supplier_id":9611,"current_time":"2018-08-06 15:49:58"}]}
+{"event_type":"insert","rows":[{"id":379735,"sku":"ss","origin_supplier_id":961,"supplier_id":3333,"current_time":"2018-08-06 15:50:58"}]}
