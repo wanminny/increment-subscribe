@@ -1,15 +1,12 @@
 package env
 
 const (
-
 	MYSQL_INI_FILE_RELEASE = "mysql_release.ini"
-	MYSQL_INI_FILE_TEST = "mysql_test.ini"
+	MYSQL_INI_FILE_TEST    = "mysql_test.ini"
 
 	RABBIT_MQ_FILE_RELEASE = "rabbit_release.ini"
-	RABBIT_MQ_FILE_TEST = "rabbit_test.ini"
-
+	RABBIT_MQ_FILE_TEST    = "rabbit_test.ini"
 )
-
 
 const (
 	//事件类型
@@ -25,7 +22,7 @@ const (
 	START_UP_SYNC_RECORDS = 1000
 
 	//需要监控binlogFile
-	BIN_LOG_FILE = "mysql-bin.000076"
+	BIN_LOG_FILE     = "mysql-bin.000076"
 	BIN_LOG_POSITION = 40415958
 
 	//读取的日志文件

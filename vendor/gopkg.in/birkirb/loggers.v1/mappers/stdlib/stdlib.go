@@ -74,7 +74,7 @@ func (l *goLog) WithFields(fields ...interface{}) loggers.Advanced {
 		s = append(s, fmt.Sprint(key, "=", value))
 	}
 
-	r := gologPostfixLogger{l, "["+strings.Join(s, ", ")+"]"}
+	r := gologPostfixLogger{l, "[" + strings.Join(s, ", ") + "]"}
 	return mappers.NewAdvancedMap(&r)
 }
 

@@ -94,7 +94,7 @@ func (h *RotatingFileHandler) Close() error {
 
 func (h *RotatingFileHandler) doRollover() {
 
-	if h.curBytes < h.maxBytes  {
+	if h.curBytes < h.maxBytes {
 		return
 	}
 

@@ -2,14 +2,14 @@ package main
 
 //消费者 简单模式
 import (
+	"fmt"
 	"github.com/streadway/amqp"
 	"log"
 	"lt-test/supplier/tools"
-	"fmt"
 	"time"
 )
 
-func Consumer(url string)  {
+func Consumer(url string) {
 
 	fmt.Println(url)
 	//建立链接
@@ -25,11 +25,11 @@ func Consumer(url string)  {
 	//  声明或创建队列（已知queueName队列存在了可以省略此操作);
 	q, err := ch.QueueDeclare(
 		queueName, // name
-		true,         // durable
-		false,        // delete when unused
-		false,        // exclusive
-		false,        // no-wait
-		nil,          // arguments
+		true,      // durable
+		false,     // delete when unused
+		false,     // exclusive
+		false,     // no-wait
+		nil,       // arguments
 	)
 	tools.FailOnError(err, "Failed to declare a queue")
 
@@ -40,7 +40,6 @@ func Consumer(url string)  {
 		false, // global
 	)
 	tools.FailOnError(err, "Failed to set QoS")
-
 
 	//消费
 	msgs, err := ch.Consume(
@@ -54,13 +53,12 @@ func Consumer(url string)  {
 	)
 	tools.FailOnError(err, "Failed to register a consumer")
 
-
 	forever := make(chan bool)
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message: %s", d.Body)
 			//故意超时
-			time.Sleep(1000*time.Microsecond)
+			time.Sleep(1000 * time.Microsecond)
 			//time.Sleep(time.Second*35)
 			//log.Printf("Done")
 			d.Ack(false)
@@ -71,11 +69,9 @@ func Consumer(url string)  {
 	<-forever
 }
 
-
-
 var queueName = "fuckname"
 
-func main()  {
+func main() {
 	//mq URL supplier是指vhost;
 	url := "amqp://wanmin:wanmin@127.0.0.1:5672/supplier"
 	Consumer(url)

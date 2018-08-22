@@ -1,19 +1,18 @@
 package main
 
 import (
-	"github.com/siddontang/go-mysql/replication"
-	"github.com/siddontang/go-mysql/mysql"
 	"context"
+	"github.com/siddontang/go-mysql/mysql"
+	"github.com/siddontang/go-mysql/replication"
 	"os"
 )
 
 ///从指定位置开始分析binlog日志；
-func main()  {
-
+func main() {
 
 	// Create a binlog syncer with a unique server id, the server id must be different from other MySQL's.
 	// flavor is mysql or mariadb
-	cfg := replication.BinlogSyncerConfig {
+	cfg := replication.BinlogSyncerConfig{
 		ServerID: 100,
 		Flavor:   "mysql",
 		Host:     "127.0.0.1",

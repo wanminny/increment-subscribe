@@ -7,9 +7,5 @@
 
 /*
 Padsg test for doc
- */
+*/
 package doc
-
-
-
-

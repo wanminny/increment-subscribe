@@ -72,7 +72,7 @@ func (gtid *MariadbGTID) Clone() *MariadbGTID {
 	return o
 }
 
-func (gtid *MariadbGTID) forward(newer *MariadbGTID) error  {
+func (gtid *MariadbGTID) forward(newer *MariadbGTID) error {
 	if newer.DomainID != gtid.DomainID {
 		return errors.Errorf("%s is not same with doamin of %s", newer, gtid)
 	}
@@ -110,6 +110,7 @@ func ParseMariadbGTIDSet(str string) (GTIDSet, error) {
 	}
 	return s, nil
 }
+
 // AddSet adds mariadb gtid into mariadb gtid set
 func (s *MariadbGTIDSet) AddSet(gtid *MariadbGTID) error {
 	if gtid == nil {
@@ -139,7 +140,6 @@ func (s *MariadbGTIDSet) Update(GTIDStr string) error {
 	err = s.AddSet(gtid)
 	return errors.Trace(err)
 }
-
 
 func (s *MariadbGTIDSet) String() string {
 	return hack.String(s.Encode())
@@ -176,7 +176,7 @@ func (s *MariadbGTIDSet) Equal(o GTIDSet) bool {
 	if !ok {
 		return false
 	}
-	
+
 	if len(other.Sets) != len(s.Sets) {
 		return false
 	}

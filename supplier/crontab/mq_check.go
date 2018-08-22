@@ -9,23 +9,22 @@ import (
 )
 
 const (
-
 	PER_TIME_CHECK_IDLE_TIME = 2
 )
 
 var (
-	mqC = tools.RabbitMqConfig{}
+	mqC    = tools.RabbitMqConfig{}
 	scheme = "amqp://"
-	Url = ""
+	Url    = ""
 )
 
 // 每两分钟检查一次 是否健康
-func CheckMqIsAlive()  {
+func CheckMqIsAlive() {
 
 	//time.AfterFunc(PER_TIME_CHECK_IDLE_TIME * time.Minute,isAlive)
 	t := time.NewTicker(PER_TIME_CHECK_IDLE_TIME * time.Minute)
 	go func() {
-		for v:=range t.C{
+		for v := range t.C {
 			log.Println(v)
 			isAlive()
 		}
@@ -33,9 +32,9 @@ func CheckMqIsAlive()  {
 }
 
 // 检查rabbit是否健康
-func isAlive()  {
+func isAlive() {
 
-	mqC.ReadMQIni(&mqC,"mq")
+	mqC.ReadMQIni(&mqC, "mq")
 	Url = scheme + mqC.Username + ":" + mqC.Password + "@" + mqC.Host + ":" + mqC.Port + "/" + mqC.Vhost
 	queueName := mqC.Queue
 
@@ -43,7 +42,7 @@ func isAlive()  {
 	//拨号；建立连接
 	conn, err := amqp.Dial(Url)
 	if err != nil {
-		log.Println(Url,err)
+		log.Println(Url, err)
 		tools.DdTalk([]byte(err.Error()))
 		return
 	}

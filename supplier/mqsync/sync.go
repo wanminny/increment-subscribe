@@ -2,37 +2,34 @@ package main
 
 import (
 	"fmt"
+	"github.com/juju/errors"
 	"github.com/streadway/amqp"
+	"log"
 	"lt-test/supplier/tools"
 	"time"
-	"log"
-	"github.com/juju/errors"
 )
-
 
 var (
 	scheme = "amqp://"
 
 	//源
-	destUrl    = ""
-	destMqC    = tools.RabbitMqConfig{}
+	destUrl = ""
+	destMqC = tools.RabbitMqConfig{}
 
 	//目的地
-	sourceUrl    = ""
-	sourceMqC    = tools.RabbitMqConfig{}
+	sourceUrl = ""
+	sourceMqC = tools.RabbitMqConfig{}
 
-
-	v = make(chan []byte,512)
-
+	v = make(chan []byte, 512)
 )
 
-const MAX_RECONNECT_TIME_IDLE  = 3
+const MAX_RECONNECT_TIME_IDLE = 3
 
 // mq 跨机房同步
 
 func Consumer() {
 
-	sourceMqC.ReadMQIni(&sourceMqC,"mq_source")
+	sourceMqC.ReadMQIni(&sourceMqC, "mq_source")
 	sourceUrl = scheme + sourceMqC.Username + ":" + sourceMqC.Password + "@" + sourceMqC.Host + ":" + sourceMqC.Port + "/" + sourceMqC.Vhost
 	queueName := sourceMqC.Queue
 
@@ -101,7 +98,6 @@ func Consumer() {
 	<-forever
 }
 
-
 func reconnect(Url string) (availableCh *amqp.Channel) {
 	//reconnect
 	for {
@@ -126,9 +122,9 @@ func reconnect(Url string) (availableCh *amqp.Channel) {
 	}
 }
 
-func Producer(msg chan []byte) (err error){
+func Producer(msg chan []byte) (err error) {
 
-	destMqC.ReadMQIni(&destMqC,"mq_destination")
+	destMqC.ReadMQIni(&destMqC, "mq_destination")
 	destUrl = scheme + destMqC.Username + ":" + destMqC.Password + "@" + destMqC.Host + ":" + destMqC.Port + "/" + destMqC.Vhost
 	queueName := destMqC.Queue
 	//exchange := mqC.Exchange
@@ -198,7 +194,7 @@ func Producer(msg chan []byte) (err error){
 	return nil
 }
 
-func main()  {
+func main() {
 
 	Consumer()
 
@@ -207,4 +203,3 @@ func main()  {
 	//
 	//}
 }
-

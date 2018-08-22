@@ -1,21 +1,21 @@
 package main
 
 import (
-	"strings"
 	"log"
+	"strings"
 
 	"github.com/astaxie/beego/logs"
 	"github.com/siddontang/go-mysql/canal"
 
-	"lt-test/supplier/tools"
 	"lt-test/supplier/biz"
+	"lt-test/supplier/tools"
 )
 
 func init() {
 	log.SetFlags(log.Lshortfile | log.Ldate)
 }
 
-var(
+var (
 	sqlC = &tools.MysqlConfig{}
 )
 

@@ -1,14 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"github.com/tatsushid/go-fastping"
 	"net"
 	"os"
-	"fmt"
 	"time"
 )
 
-func main()  {
+func main() {
 
 	p := fastping.NewPinger()
 	//p.Network("udp")
@@ -29,4 +29,3 @@ func main()  {
 		fmt.Println(err)
 	}
 }
-

@@ -3,9 +3,8 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"net/url"
 	_ "github.com/go-sql-driver/mysql"
-
+	"net/url"
 )
 
 type MySQLClient struct {
@@ -19,7 +18,7 @@ type MySQLClient struct {
 	MaxOpen int
 }
 
-func  (mc *MySQLClient)Init() (err error) {
+func (mc *MySQLClient) Init() (err error) {
 	// 构建 DSN 时尤其注意 loc 和 parseTime 正确设置
 	// 东八区，允许解析时间字段
 	uri := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&loc=%s&parseTime=true",
@@ -44,4 +43,3 @@ func  (mc *MySQLClient)Init() (err error) {
 	mc.Pool.SetMaxOpenConns(mc.MaxOpen)
 	return nil
 }
-

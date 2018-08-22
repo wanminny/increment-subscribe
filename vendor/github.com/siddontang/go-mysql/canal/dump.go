@@ -4,13 +4,13 @@ import (
 	"strconv"
 	"time"
 
+	"fmt"
 	"github.com/juju/errors"
 	"github.com/siddontang/go-mysql/dump"
 	"github.com/siddontang/go-mysql/mysql"
 	"github.com/siddontang/go-mysql/schema"
 	"gopkg.in/birkirb/loggers.v1/log"
 	"lt-test/supplier/tools"
-	"fmt"
 
 	. "lt-test/supplier/env"
 )
@@ -128,8 +128,8 @@ func (c *Canal) dump() error {
 		time.Now().Sub(start).Seconds(), h.name, h.pos)
 
 	//log the last binlogfile and position;
-	binInfo := fmt.Sprintf("%s,%s,%d\n",tools.CurrentTime(),h.name,h.pos)
-	tools.SaveToFile(binInfo,BIN_LOG_FILE_TO_READ)
+	binInfo := fmt.Sprintf("%s,%s,%d\n", tools.CurrentTime(), h.name, h.pos)
+	tools.SaveToFile(binInfo, BIN_LOG_FILE_TO_READ)
 
 	pos := mysql.Position{h.name, uint32(h.pos)}
 	c.master.Update(pos)

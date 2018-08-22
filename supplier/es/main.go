@@ -105,7 +105,7 @@ func main() {
 		}
 	}
 
-	for i:=0;i<1000;i++{
+	for i := 0; i < 1000; i++ {
 		// Index a tweet (using JSON serialization)
 		tweet1 := Tweet{User: "olivere", Message: "Take Five", Retweets: 0}
 		put1, err := client.Index().
@@ -221,7 +221,6 @@ func main() {
 	//}
 	//fmt.Printf("New version of tweet %q is now %d\n", update.Id, update.Version)
 
-
 	//// Delete an index.
 	//deleteIndex, err := client.DeleteIndex("twitter").Do(ctx)
 	//if err != nil {
@@ -232,4 +231,3 @@ func main() {
 	//	// Not acknowledged
 	//}
 }
-

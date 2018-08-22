@@ -17,9 +17,8 @@ import (
 	"gopkg.in/birkirb/loggers.v1/log"
 	mylog "log"
 
-	"lt-test/supplier/tools"
 	. "lt-test/supplier/env"
-
+	"lt-test/supplier/tools"
 )
 
 var (
@@ -103,6 +102,7 @@ type BinlogSyncer struct {
 
 	retryCount int
 }
+
 // NewBinlogSyncer creates the BinlogSyncer with cfg.
 func NewBinlogSyncer(cfg BinlogSyncerConfig) *BinlogSyncer {
 	// Clear the Password to avoid outputing it in log.
@@ -164,21 +164,19 @@ func (b *BinlogSyncer) isClosed() bool {
 	}
 }
 
+func (b *BinlogSyncer) FlushBinLogRecord() (err error) {
 
-
-func (b *BinlogSyncer) FlushBinLogRecord() (err error){
-
-	if b.c != nil{
-		r,err := b.c.Execute("show master status")
-		if err != nil{
+	if b.c != nil {
+		r, err := b.c.Execute("show master status")
+		if err != nil {
 			mylog.Println(err)
 		}
-		fileName,_ := r.GetString(0,0)
-		pos,_:=r.GetString(0,1)
+		fileName, _ := r.GetString(0, 0)
+		pos, _ := r.GetString(0, 1)
 		//mylog.Printf("%s,%s",fileName,pos)
-		toWriteStr := fmt.Sprintf("%s,%s,%s\n",tools.CurrentTime(),fileName,pos)
+		toWriteStr := fmt.Sprintf("%s,%s,%s\n", tools.CurrentTime(), fileName, pos)
 		//mylog.Println(toWriteStr)
-		tools.SaveToFile(toWriteStr,BIN_LOG_FILE_TO_READ)
+		tools.SaveToFile(toWriteStr, BIN_LOG_FILE_TO_READ)
 		//if err != nil{
 		//	pos,err :=r.GetString(0,1)
 		//	if err != nil{
@@ -188,13 +186,13 @@ func (b *BinlogSyncer) FlushBinLogRecord() (err error){
 		//		tools.SaveToFile(toWriteStr,"binlog.txt")
 		//	}
 		//}
-	}else{
+	} else {
 		mylog.Println("b.c is nil")
 	}
 	return
 }
 
-func (b *BinlogSyncer) RegisterSlave() (bin *BinlogSyncer){
+func (b *BinlogSyncer) RegisterSlave() (bin *BinlogSyncer) {
 
 	b.registerSlave()
 	bin = b

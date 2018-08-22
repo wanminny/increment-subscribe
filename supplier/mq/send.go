@@ -51,7 +51,7 @@ func reconnect(Url string) (availableCh *amqp.Channel) {
 
 func Producer(msg chan []byte) {
 
-	mqC.ReadMQIni(&mqC,"mq")
+	mqC.ReadMQIni(&mqC, "mq")
 	Url = scheme + mqC.Username + ":" + mqC.Password + "@" + mqC.Host + ":" + mqC.Port + "/" + mqC.Vhost
 	queueName := mqC.Queue
 	//exchange := mqC.Exchange

@@ -63,7 +63,7 @@ func (l *goTestLog) WithFields(fields ...interface{}) loggers.Advanced {
 		s = append(s, fmt.Sprint(key, "=", value))
 	}
 
-	r := goTestLogPostfixLogger{l, "["+strings.Join(s, ", ")+"]"}
+	r := goTestLogPostfixLogger{l, "[" + strings.Join(s, ", ") + "]"}
 	return mappers.NewAdvancedMap(&r)
 }
 
